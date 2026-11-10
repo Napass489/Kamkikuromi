@@ -1,0 +1,1375 @@
+<!DOCTYPE html>
+<html lang="th" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แก้มใส คิคุอาโนเนะ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Fredoka:wght@400;500;600;700&family=Mitr:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        eng: ['Fredoka', 'sans-serif'],
+                        thai: ['Mitr', 'sans-serif'],
+                        logo: ['Mitr', '"Alfa Slab One"', 'sans-serif'],
+                    },
+                    colors: {
+                        pastel: {
+                            purple: '#dcb5ff',
+                            purpleLight: '#f5eeff',
+                            purpleDark: '#9b72cf',
+                            blue: '#c4b5fd',        /* ปรับเป็นโทนม่วงลาเวนเดอร์ */
+                            blueLight: '#f3e8ff',   /* ปรับเป็นโทนม่วงอ่อน */
+                            pink: '#e9d5ff',        /* ปรับเป็นโทนม่วงพาสเทล */
+                            pinkLight: '#faf5ff',   /* ปรับเป็นโทนม่วงสว่าง */
+                            yellow: '#d8b4fe',      /* ปรับเป็นโทนม่วงกลาง */
+                            yellowLight: '#f5f3ff', /* ปรับเป็นโทนม่วงซอฟต์ */
+                        },
+                        kawaii: {
+                            bg: '#f7f3ff',
+                            card: '#ffffff',
+                            text: '#6b4c8c', // Deep purple for text
+                            border: '#dcb5ff',
+                            highlight: '#9353d3', // Vibrant purple
+                            header: '#eaddff' // สีม่วงพาสเทล
+                        }
+                    },
+                    boxShadow: {
+                        'kawaii': '0 8px 24px -6px rgba(220, 181, 255, 0.4)',
+                        'kawaii-inner': 'inset 0 2px 4px 0 rgba(220, 181, 255, 0.2)',
+                    },
+                    animation: {
+                        'blob': 'blob 7s infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-delayed': 'float 6s ease-in-out 3s infinite',
+                        'gradient-x': 'gradient-x 3s ease infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        'gradient-x': {
+                            '0%, 100%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #f7f3ff;
+            background-image: 
+                radial-gradient(circle at top left, rgba(196, 181, 253, 0.5) 0%, transparent 40%),
+                radial-gradient(circle at bottom right, rgba(216, 180, 254, 0.5) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(233, 213, 255, 0.5) 0%, transparent 40%),
+                radial-gradient(#dcb5ff 2px, transparent 2px);
+            background-size: 100% 100%, 100% 100%, 100% 100%, 30px 30px;
+            background-attachment: fixed;
+        }
+        
+        /* ขอบสีขาวที่เนียนและเรียบร้อยกว่าเดิม */
+        .title-stroke {
+            -webkit-text-stroke: 10px white; /* ทำขอบสีขาวหนาๆ ไว้เลเยอร์ล่าง (เอาเงาสีม่วงออกแล้ว) */
+        }
+
+        .card-kawaii {
+            background: rgba(255, 255, 255, 0.95);
+            border: 3px solid #dcb5ff;
+            border-radius: 28px;
+            box-shadow: 0 10px 25px -5px rgba(220, 181, 255, 0.4);
+            position: relative;
+        }
+
+        .btn-kawaii {
+            background: linear-gradient(135deg, #c084fc 0%, #dcb5ff 100%);
+            border: 2px solid #fff;
+            box-shadow: 0 4px 12px rgba(220, 181, 255, 0.5);
+            transition: all 0.3s ease;
+        }
+        .btn-kawaii:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 6px 16px rgba(220, 181, 255, 0.7);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f5eeff;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #dcb5ff;
+            border-radius: 10px;
+        }
+
+        .modal-overlay {
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-content {
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+
+        /* Sidebar Transition */
+        #sidebar {
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        #sidebar-overlay {
+            transition: opacity 0.4s ease, visibility 0.4s ease;
+        }
+    </style>
+</head>
+<body class="font-thai text-kawaii-text min-h-screen relative pb-12">
+
+    <!-- Sparkle SVG Definitions -->
+    <svg width="0" height="0" class="hidden">
+        <defs>
+            <g id="icon-sparkle">
+                <path d="M12 0C12 5.5 16.5 10 22 10C16.5 10 12 14.5 12 20C12 14.5 7.5 10 2 10C7.5 10 12 5.5 12 0Z" fill="currentColor"/>
+            </g>
+            <g id="icon-heart">
+                <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" fill="currentColor"/>
+            </g>
+            <g id="icon-cloud">
+                <path d="M18.5 10c-.14 0-.27.01-.4.03C17.43 6.64 14.49 4 11 4 7.13 4 4 7.13 4 11c0 .17.01.33.03.5A5.5 5.5 0 0 0 5.5 22h13a4.5 4.5 0 0 0 0-9z" fill="currentColor"/>
+            </g>
+        </defs>
+    </svg>
+
+    <!-- Background Decorations -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none -z-10">
+        <!-- Animated Blobs (Soft Glows) - Mixed Colors -->
+        <div class="absolute top-[-10%] left-[-10%] w-[400px] h-[400px] bg-pastel-pink/60 rounded-full mix-blend-overlay filter blur-[80px] animate-blob"></div>
+        <div class="absolute top-[30%] right-[-15%] w-[350px] h-[350px] bg-pastel-blue/60 rounded-full mix-blend-overlay filter blur-[80px] animate-blob" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-[-10%] left-[10%] w-[450px] h-[450px] bg-pastel-yellow/50 rounded-full mix-blend-overlay filter blur-[100px] animate-blob" style="animation-delay: 4s;"></div>
+        
+        <!-- Floating Elements -->
+        <div class="absolute top-[15%] left-[5%] text-pastel-blue animate-float"><svg class="w-10 h-10" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+        <div class="absolute top-[35%] right-[8%] text-pastel-yellow animate-float-delayed"><svg class="w-8 h-8" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+        <div class="absolute bottom-[25%] left-[10%] text-pastel-purple/50 animate-float-delayed"><svg class="w-12 h-12" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+        <div class="absolute bottom-[15%] right-[5%] text-pastel-pink animate-float"><svg class="w-6 h-6" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+        <div class="absolute top-[50%] left-[85%] text-pastel-purple/40 animate-float" style="animation-delay: 1s;"><svg class="w-7 h-7" viewBox="0 0 24 24"><use href="#icon-heart"></use></svg></div>
+        
+        <!-- Cute Clouds -->
+        <div class="absolute top-[5%] right-[15%] text-white/60 animate-float-delayed"><svg class="w-24 h-24" viewBox="0 0 24 24"><use href="#icon-cloud"></use></svg></div>
+        <div class="absolute top-[60%] left-[2%] text-white/50 animate-float" style="animation-delay: 2s;"><svg class="w-32 h-32" viewBox="0 0 24 24"><use href="#icon-cloud"></use></svg></div>
+    </div>
+
+    <!-- Navigation Overlay -->
+    <div id="sidebar-overlay" class="fixed inset-0 bg-pastel-purpleDark/20 backdrop-blur-sm z-40 opacity-0 invisible" onclick="toggleSidebar()"></div>
+
+    <!-- Sidebar -->
+    <aside id="sidebar" class="fixed top-0 left-0 h-full w-64 bg-white border-r-4 border-pastel-purple z-50 transform -translate-x-full rounded-r-3xl shadow-2xl flex flex-col">
+        <div class="p-6 flex items-center justify-between border-b-2 border-pastel-purpleLight">
+            <h2 class="font-eng text-2xl text-kawaii-highlight font-bold">Menu</h2>
+            <button onclick="toggleSidebar()" class="text-pastel-purpleDark hover:text-pastel-pink focus:outline-none">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"></path>
+                </svg>
+            </button>
+        </div>
+        <nav class="flex-1 overflow-y-auto py-4 px-4 space-y-2">
+            <a href="#home" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-purpleLight text-kawaii-text font-medium transition-colors">หน้าแรก</a>
+            <!-- ซ่อนลิงก์เดิมด้วย CSS ตามกฎห้ามลบ HTML Element และปรับเมนูให้ตรงกับหัวข้อภายในร้าน -->
+            <a href="#services" onclick="toggleSidebar()" class="hidden px-4 py-3 rounded-2xl hover:bg-pastel-blueLight text-kawaii-text font-medium transition-colors">บริการของเรา</a>
+            <a href="#portfolio" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-pinkLight text-kawaii-text font-medium transition-colors">ตัวอย่างผลงานร้านแก้ม</a>
+            <a href="#pricing" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-yellowLight text-kawaii-text font-medium transition-colors">เรทราคา</a>
+            <a href="#process" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-blueLight text-kawaii-text font-medium transition-colors">ขั้นตอนการสั่งทำ</a>
+            <a href="#courses" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-purpleLight text-kawaii-text font-medium transition-colors">ของตกแต่ง/ตูน/บล็อก</a>
+            <a href="#goodnote" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-blueLight text-kawaii-text font-medium transition-colors">ตัวอย่างกลุ่ม</a>
+            <a href="#contact" onclick="toggleSidebar()" class="block px-4 py-3 rounded-2xl hover:bg-pastel-pinkLight text-kawaii-text font-medium transition-colors">ช่องทางการติดต่อน่องแก้ม</a>
+        </nav>
+        <div class="p-4 border-t-2 border-pastel-purpleLight text-center text-sm text-pastel-purpleDark">
+            <svg class="w-5 h-5 inline-block mr-1 text-pastel-purple" viewBox="0 0 24 24"><use href="#icon-heart"></use></svg>
+            แก้มใส คิคุอาโนเนะ
+        </div>
+    </aside>
+
+    <!-- Top Bar with Hamburger -->
+    <div class="absolute top-0 left-0 right-0 p-4 z-30 flex justify-between items-start pointer-events-none">
+        <button onclick="toggleSidebar()" class="pointer-events-auto bg-white/90 backdrop-blur border-2 border-pastel-purple text-kawaii-highlight p-3 rounded-2xl shadow-kawaii hover:bg-pastel-purpleLight transition-colors focus:outline-none">
+            <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+    </div>
+
+    <!-- Main Container -->
+    <main class="max-w-lg mx-auto pt-20 px-4 space-y-8">
+
+        <!-- Header Section -->
+        <section id="home" class="text-center relative pt-8 pb-4">
+            <div class="absolute top-0 left-10 text-white opacity-80 animate-pulse w-8 h-8"><svg viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+            <div class="absolute top-10 right-8 text-white opacity-80 animate-pulse w-6 h-6" style="animation-delay: 1s;"><svg viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+            
+            <!-- ใช้เทคนิค Grid เพื่อบังคับให้ข้อความ 2 ชั้นซ้อนทับกันพอดีเป๊ะ ไม่มีทางบั๊กหรือเคลื่อน -->
+            <div class="grid place-items-center mb-2">
+                <!-- ขอบสีขาวและเงา (เลเยอร์ล่างสุด) ปรับ py-2 และ leading-relaxed เพื่อไม่ให้สระอุถูกตัด -->
+                <h1 id="shop-title-stroke" class="col-start-1 row-start-1 font-logo text-4xl md:text-5xl text-white title-stroke font-bold tracking-wide leading-relaxed py-2 pointer-events-none" aria-hidden="true">แก้มใส คิคุอาโนเนะ</h1>
+                <!-- สีตัวอักษรไล่ระดับ (เลเยอร์บนสุด) จะมาทับปิดรอยหยักด้านในพอดี -->
+                <h1 id="shop-title-main" class="col-start-1 row-start-1 font-logo text-4xl md:text-5xl bg-gradient-to-r from-kawaii-highlight via-pastel-purpleDark to-pastel-purple text-transparent bg-clip-text animate-gradient-x font-bold tracking-wide leading-relaxed py-2 z-10">แก้มใส คิคุอาโนเนะ</h1>
+            </div>
+            
+            <p id="shop-subtitle" class="font-eng text-xl text-pastel-purpleDark font-medium tracking-wide mt-1">Welcome to my shop</p>
+            
+            <div class="mt-6 flex justify-center">
+                <div class="bg-white/70 px-6 py-2 rounded-full border border-pastel-purple inline-flex items-center space-x-2 text-sm text-pastel-purpleDark shadow-sm backdrop-blur-sm">
+                    <svg class="w-4 h-4 text-kawaii-highlight" viewBox="0 0 24 24"><use href="#icon-heart"></use></svg>
+                    <span id="shop-status-badge">เปิดให้บริการแล้ว</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- Intro Box (ซ่อนไว้ด้วย CSS ตามวงสีแดง โดยไม่ลบ HTML Element) -->
+        <section class="hidden card-kawaii p-6 text-center">
+            <p class="text-lg mb-2">ร้านแก้มใส คิคุอาโนเนะ รับทำเว็บไซต์ครบวงจร</p>
+            <p class="text-lg mb-4">และจำหน่ายแอป Goodnote ทุกรูปแบบ</p>
+            <div class="inline-block bg-pastel-purpleLight text-kawaii-highlight px-6 py-2 rounded-full font-medium text-xl border border-pastel-purple">
+                เริ่มต้นเพียง 20.- เท่านั้น
+            </div>
+        </section>
+
+        <!-- Services (ซ่อนไว้ด้วย CSS ตามวงสีแดง โดยไม่ลบ HTML Element) -->
+        <section id="services" class="hidden card-kawaii p-6">
+            <!-- Header แบบใหม่ -->
+            <div class="flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-pink rounded-r-xl py-2.5 px-4 mb-5 shadow-sm">
+                <span class="text-[20px] mr-3 shrink-0">🎨</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">งานที่รับทำ</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- เพิ่มเติมสอบถามได้ค่ะ -</span>
+                </div>
+            </div>
+
+            <ul class="space-y-3 mb-6">
+                <li class="flex items-start gap-3 bg-pastel-purpleLight p-3 rounded-xl border border-pastel-purple/40">
+                    <div class="mt-1 w-2 h-2 rounded-full bg-pastel-purple flex-shrink-0"></div>
+                    <span>เว็บเรทราคาแอปพรีเมียม</span>
+                </li>
+                <li class="flex items-start gap-3 bg-pastel-blueLight p-3 rounded-xl border border-pastel-blue/40">
+                    <div class="mt-1 w-2 h-2 rounded-full bg-pastel-blue flex-shrink-0"></div>
+                    <span>เว็บเรทราคารับเติมเกมส์</span>
+                </li>
+                <li class="flex items-start gap-3 bg-pastel-pinkLight p-3 rounded-xl border border-pastel-pink/40">
+                    <div class="mt-1 w-2 h-2 rounded-full bg-pastel-pink flex-shrink-0"></div>
+                    <span>เว็บเรทราคารับทำป้าย</span>
+                </li>
+                <li class="flex items-start gap-3 bg-pastel-yellowLight p-3 rounded-xl border border-pastel-yellow/60">
+                    <div class="mt-1 w-2 h-2 rounded-full bg-pastel-yellow flex-shrink-0"></div>
+                    <span>เว็บอื่น ๆ สอบถามเพิ่มเติมได้</span>
+                </li>
+            </ul>
+            <div class="text-center text-sm text-pastel-purpleDark bg-white border border-pastel-purple/50 p-4 rounded-2xl shadow-kawaii-inner">
+                <p class="mb-1 text-kawaii-highlight font-medium">✨ เว็บสามารถใส่ข้อมูลได้ไม่จำกัด ✨</p>
+                <p>อยากให้มีอะไรบนหน้าเว็บ แจ้งได้เลย<br>ทางร้านออกแบบจัดวางให้ฟรี!</p>
+            </div>
+        </section>
+
+        <!-- Portfolio Popups -->
+        <section id="portfolio" class="card-kawaii p-6 text-center">
+            <!-- Header แบบใหม่ -->
+            <div class="flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-blue rounded-r-xl py-2.5 px-4 mb-6 shadow-sm text-left">
+                <span class="text-[20px] mr-3 shrink-0">✨</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">ตัวอย่างผลงานต่างๆร้านแก้ม</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- คลิกเลย -</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col gap-4">
+                <a id="btn-portfolio-drive" href="https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr" target="_blank" class="btn-kawaii text-white py-3.5 px-6 rounded-full font-medium text-lg flex items-center justify-center gap-2" style="background: linear-gradient(135deg, #c084fc 0%, #9333ea 100%);">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg>
+                    <span>ตัวอย่างผลงานต่างๆร้านแก้ม คลิกเลย</span>
+                </a>
+                <!-- คงโค้ดปุ่มเดิมไว้ตามคำสั่งห้ามลบ HTML Element แต่ซ่อนไว้ด้วย CSS -->
+                <button onclick="openModal('modal-bright')" class="hidden btn-kawaii text-white py-3 px-6 rounded-full font-medium text-lg items-center justify-center gap-2" style="background: linear-gradient(135deg, #d8b4fe 0%, #a855f7 100%);">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg>
+                    โทนสดใส
+                </button>
+                <button onclick="openModal('modal-dark')" class="hidden btn-kawaii text-white py-3 px-6 rounded-full font-medium text-lg items-center justify-center gap-2" style="background: linear-gradient(135deg, #9333ea 0%, #6b21a8 100%);">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg>
+                    โทนมืด
+                </button>
+                <button onclick="openModal('modal-pastel')" class="hidden btn-kawaii text-white py-3 px-6 rounded-full font-medium text-lg items-center justify-center gap-2" style="background: linear-gradient(135deg, #dcb5ff 0%, #c4b5fd 100%);">
+                    <svg class="w-5 h-5 text-white" viewBox="0 0 24 24"><use href="#icon-heart"></use></svg>
+                    โทนพาสเทล
+                </button>
+            </div>
+        </section>
+
+            <!-- Pricing & Details -->
+        <section id="pricing" class="card-kawaii p-6">
+            <!-- Header แบบใหม่ -->
+            <div class="flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-yellow rounded-r-xl py-2.5 px-4 mb-6 shadow-sm">
+                <span class="text-[20px] mr-3 shrink-0">💰</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">เรทราคา</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- ประเมินราคาก่อนทำได้ค่ะ -</span>
+                </div>
+            </div>
+            
+            <div class="bg-pastel-purpleLight p-4 rounded-2xl border border-pastel-purple/50 mb-5 text-center">
+                <p class="text-pastel-purpleDark font-medium mb-1">ราคาเริ่มต้น</p>
+                <p class="text-3xl font-eng text-kawaii-highlight font-bold mb-1">45.-</p>
+                <p class="hidden text-xs text-pastel-purpleDark/70">(ไม่เกิน 200 lines + ใส่โลโก้อย่างเดียว)</p>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                <div>
+                    <h3 class="font-bold text-pastel-purpleDark mb-2 bg-white border border-pastel-purple/30 inline-block px-3 py-1 rounded-full text-xs shadow-sm">รายละเอียดเพิ่ม</h3>
+                    <ul class="space-y-1 ml-2">
+                        <li>• ป้ายฟุ้งๆ อลังการ <span class="text-kawaii-highlight font-medium">69+</span></li>
+                        <li>• ป้ายแนวเฮด <span class="text-kawaii-highlight font-medium">45+</span></li>
+                        <li>• ลายน้ำ <span class="text-kawaii-highlight font-medium">19+</span></li>
+                    </ul>
+                </div>
+                <div class="hidden">
+                    <h3 class="font-bold text-pastel-purpleDark mb-2 bg-white border border-pastel-blue/30 inline-block px-3 py-1 rounded-full text-xs shadow-sm">Add-on</h3>
+                    <p class="ml-2">• แบนเนอร์ 1–2 รูป <span class="text-kawaii-highlight font-bold">+29.-</span></p>
+                </div>
+                <div>
+                    <h3 class="font-bold text-pastel-purpleDark mb-2 bg-white border border-pastel-pink/30 inline-block px-3 py-1 rounded-full text-xs shadow-sm">การแก้ไขงาน</h3>
+                    <ul class="space-y-1 ml-2">
+                        <li>• แก้ก่อนส่งได้เรื่อยๆ</li>
+                        <li>• กรณีเปลี่ยนตัวตูน/ของตกแต่ง/บล็อก กระทันหัน <span class="text-kawaii-highlight font-bold">+10.-</span></li>
+                        <li>• ขอแก้หลังส่งงานแล้ว <span class="text-kawaii-highlight font-bold">+15.-</span></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <p class="text-center text-xs text-pastel-purpleDark/60 mt-4">* ราคาขึ้นอยู่กับปริมาณและรายละเอียดของงาน</p>
+
+            <!-- Promotion (ซ่อนไว้ด้วย CSS ตามภาพที่กากบาทออก โดยไม่ลบ HTML Element) -->
+            <div class="hidden mt-6 bg-gradient-to-br from-pastel-purpleLight to-pastel-blueLight border-2 border-pastel-blue/40 p-5 rounded-2xl shadow-sm relative overflow-hidden">
+                <div class="absolute -right-4 -top-4 w-16 h-16 text-pastel-purple opacity-40"><svg viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg></div>
+                <h3 class="font-eng text-xl font-bold text-kawaii-highlight mb-3 text-center">Promotion</h3>
+                <p class="text-center text-lg font-bold text-kawaii-text mb-3">3 เว็บ ราคา <span class="text-2xl text-pastel-purpleDark">359.-</span></p>
+                <ul class="text-sm space-y-2 ml-2 text-kawaii-text">
+                    <li>• เว็บที่ 1 Portfolio แนะนำตัว</li>
+                    <li>• เว็บที่ 2 ป้ายบัญชี (คัดลอกเลขได้)</li>
+                    <li>• เว็บที่ 3 เลือกเทมเพลตได้</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Process & Rules -->
+        <section id="process" class="card-kawaii p-6">
+            <!-- Header แบบใหม่ -->
+            <div class="flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-purple rounded-r-xl py-2.5 px-4 mb-6 shadow-sm">
+                <span class="text-[20px] mr-3 shrink-0">📝</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">ขั้นตอนการสั่งทำ</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- อ่านรายละเอียดก่อนสั่ง -</span>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 mb-6">
+                <div class="bg-pastel-purpleLight p-3 rounded-xl border border-pastel-purple/30 text-center">
+                    <div class="w-8 h-8 bg-white text-pastel-purpleDark rounded-full flex items-center justify-center font-eng font-bold mx-auto mb-2 shadow-sm">1</div>
+                    <p class="text-xs">เลือกของตกแต่ง/<br>ตูน/บล็อก</p>
+                </div>
+                <div class="bg-pastel-blueLight p-3 rounded-xl border border-pastel-blue/30 text-center">
+                    <div class="w-8 h-8 bg-white text-pastel-purpleDark rounded-full flex items-center justify-center font-eng font-bold mx-auto mb-2 shadow-sm">2</div>
+                    <p class="text-xs">แคปส่งทางร้าน</p>
+                </div>
+                <div class="bg-pastel-pinkLight p-3 rounded-xl border border-pastel-pink/30 text-center">
+                    <div class="w-8 h-8 bg-white text-pastel-purpleDark rounded-full flex items-center justify-center font-eng font-bold mx-auto mb-2 shadow-sm">3</div>
+                    <p class="text-xs">บอกประเภทป้าย<br>ที่ต้องการ</p>
+                </div>
+                <div class="bg-pastel-yellowLight p-3 rounded-xl border border-pastel-yellow/60 text-center">
+                    <div class="w-8 h-8 bg-white text-pastel-purpleDark rounded-full flex items-center justify-center font-eng font-bold mx-auto mb-2 shadow-sm">4</div>
+                    <p class="text-xs">โอนเงินแล้ว<br>รอรับงานได้เลย</p>
+                </div>
+            </div>
+
+            <div class="space-y-4 text-sm">
+                <div>
+                    <h3 class="font-bold text-pastel-purpleDark mb-2 flex items-center gap-1">
+                        <svg class="w-4 h-4 text-pastel-yellow" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg> ระยะเวลา & เงื่อนไข
+                    </h3>
+                    <ul class="space-y-1 ml-4 list-disc text-kawaii-text marker:text-pastel-purple">
+                        <li>ใช้เวลา 4–8 ชั่วโมง</li>
+                        <li>งานเร่ง คิด x2</li>
+                        <li>แนะนำให้ส่งเรฟก่อนทำ</li>
+                        <li>ตรวจงานภายใน 30 นาที</li>
+                    </ul>
+                    <p class="mt-2 text-center bg-white p-2 rounded-lg border border-pastel-purple/30">ออกแบบใหม่ (ไม่ใช้เทมเพลต) <span class="font-bold text-kawaii-highlight">+200.-</span></p>
+                </div>
+                
+                <div class="bg-pastel-purpleLight/70 p-4 rounded-xl border border-pastel-purple">
+                    <h3 class="font-bold text-kawaii-highlight mb-2">กฎของร้าน (Rules)</h3>
+                    <ul class="space-y-1 ml-4 list-disc text-pastel-purpleDark marker:text-pastel-purple text-xs">
+                        <li>โอนแล้วไม่คืนเงินทุกกรณี</li>
+                        <li>ยกเลิกหลังตรวจงาน ไม่คืนเงิน</li>
+                        <li>อาจมีการเปลี่ยนลิงก์ในอนาคต</li>
+                        <li>ไม่รับผิดชอบกรณีเปลี่ยนโดเมน</li>
+                        <li>งดเร่งงาน</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Courses & Fonts -->
+        <section id="courses" class="card-kawaii p-6">
+            <!-- Header แบบใหม่ (ซ่อนไว้ด้วย CSS ตามวงสีแดง โดยไม่ลบโค้ด) -->
+            <div class="hidden flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-pink rounded-r-xl py-2.5 px-4 mb-6 shadow-sm">
+                <span class="text-[20px] mr-3 shrink-0">📚</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">คอร์ส & ฟอนต์</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- สอนทำเว็บและแจกฟอนต์ -</span>
+                </div>
+            </div>
+            
+            <!-- Course (ซ่อนไว้ด้วย CSS ตามวงสีแดง โดยไม่ลบโค้ด) -->
+            <div class="hidden bg-pastel-purpleLight rounded-2xl p-4 border border-pastel-purple/40 mb-6">
+                <h3 class="font-bold text-kawaii-highlight text-center mb-2">คอร์สสอนทำ "เว็บร้าน" สไตล์แก้มใส</h3>
+                <p class="text-center text-xs text-pastel-purpleDark mb-3">จาก 0 → ทำเว็บใช้งานได้จริง<br>ไม่ต้องมีพื้นฐาน สอนครบทุกขั้นตอน</p>
+                <div class="bg-white p-3 rounded-xl mb-3 text-sm">
+                    <p class="font-medium text-kawaii-highlight mb-1">สิ่งที่จะได้รับ:</p>
+                    <ul class="ml-4 list-disc marker:text-pastel-purple text-kawaii-text">
+                        <li>คลิปสอนละเอียด</li>
+                        <li>โน้ตสรุป + ทริค</li>
+                        <li>เทมเพลตเว็บ 50+ แบบ</li>
+                    </ul>
+                </div>
+                <div class="flex justify-between items-center px-2">
+                    <p class="font-bold text-kawaii-highlight">ราคา 459.- <span class="text-xs font-normal text-pastel-purpleDark">(ตลอดชีพ)</span></p>
+                    <div class="space-x-2">
+                        <a href="https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr" target="_blank" class="text-xs bg-white border border-pastel-purple/50 text-pastel-purpleDark px-3 py-1 rounded-full hover:bg-pastel-purpleLight transition">ตัวอย่าง</a>
+                        <a href="https://purple-wind-aced.cozyw75.workers.dev/" target="_blank" class="text-xs bg-white border border-pastel-purple/50 text-pastel-purpleDark px-3 py-1 rounded-full hover:bg-pastel-purpleLight transition">กฎคอร์ส</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fonts / ของตกแต่ง ตูน บล็อก -->
+            <div>
+                <h3 class="font-bold text-kawaii-highlight text-center mb-3">คลิกเลือกดูของตกแต่ง/ตูน/บล็อก</h3>
+                <div class="flex flex-col gap-2.5 mb-4">
+                    <a id="btn-decor" href="https://drive.google.com/drive/folders/1y4siEIS7i8XjYICoxJ_-fJH9ffywo92L" target="_blank" class="bg-pastel-purpleLight border border-pastel-purple text-kawaii-highlight px-4 py-2.5 rounded-full text-sm font-medium hover:bg-pastel-purple hover:text-white transition text-center shadow-sm">
+                        🎀 คลิกเลือกดูของตกแต่ง
+                    </a>
+                    <a id="btn-toon" href="https://drive.google.com/drive/folders/1y4siEIS7i8XjYICoxJ_-fJH9ffywo92L" target="_blank" class="bg-pastel-blueLight border border-pastel-blue text-kawaii-highlight px-4 py-2.5 rounded-full text-sm font-medium hover:bg-pastel-purple hover:text-white transition text-center shadow-sm">
+                        🧸 คลิกเลือกดูตูน
+                    </a>
+                    <a id="btn-block" href="https://drive.google.com/drive/folders/1y4siEIS7i8XjYICoxJ_-fJH9ffywo92L" target="_blank" class="bg-pastel-pinkLight border border-pastel-pink text-kawaii-highlight px-4 py-2.5 rounded-full text-sm font-medium hover:bg-pastel-purple hover:text-white transition text-center shadow-sm">
+                        🧊 คลิกเลือกดูบล็อก
+                    </a>
+                </div>
+                <div class="bg-white p-4 rounded-xl border border-pastel-purple/30 text-sm">
+                    <p class="font-bold text-pastel-purpleDark mb-2">วิธีสั่งทำป้าย:</p>
+                    <ol class="list-decimal ml-4 space-y-1 text-kawaii-text">
+                        <li>แคปของตกแต่ง/ตูน/บล็อกที่ต้องการ</li>
+                        <li>ทักหาแก้ม</li>
+                        <li>สั่งงาน</li>
+                        <li>รอรับงาน</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+
+        <!-- Goodnote App (ปรับเป็น ตัวอย่างกลุ่ม แบบการ์ดคอลัมน์เรียงคู่) -->
+        <section id="goodnote" class="card-kawaii p-6">
+            <!-- Header แบบใหม่ -->
+            <div class="flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-blue rounded-r-xl py-2.5 px-4 mb-6 shadow-sm">
+                <span class="text-[20px] mr-3 shrink-0">📓</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">ตัวอย่างกลุ่ม</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- คลิกดูตัวอย่างได้เลย -</span>
+                </div>
+            </div>
+
+            <!-- การ์ดคอลัมน์เรียงคู่ (2 คอลัมน์) มีรูป ชื่อ และปุ่มดูตัวอย่างเชื่อมไปไดร์ฟ -->
+            <div id="group-cards-grid" class="grid grid-cols-2 gap-3.5">
+                <!-- Card 1 -->
+                <div class="group-card-item border-2 border-pastel-purple/40 rounded-2xl p-3 bg-white flex flex-col items-center text-center shadow-sm hover:shadow-kawaii transition">
+                    <div class="w-full aspect-square rounded-xl bg-pastel-purpleLight mb-2.5 overflow-hidden border border-pastel-purple/30 flex items-center justify-center">
+                        <img id="group-img-1" src="https://placehold.co/300x300/f5eeff/9353d3?text=Group+1" alt="ตัวอย่างกลุ่ม 1" class="w-full h-full object-cover">
+                    </div>
+                    <p id="group-name-1" class="font-bold text-kawaii-text text-sm mb-2">กลุ่มของตกแต่ง 1</p>
+                    <a id="group-link-1" href="https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr" target="_blank" class="btn-kawaii w-full text-white text-xs py-2 px-3 rounded-full font-medium mt-auto">
+                        ดูตัวอย่าง
+                    </a>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="group-card-item border-2 border-pastel-purple/40 rounded-2xl p-3 bg-white flex flex-col items-center text-center shadow-sm hover:shadow-kawaii transition">
+                    <div class="w-full aspect-square rounded-xl bg-pastel-blueLight mb-2.5 overflow-hidden border border-pastel-blue/30 flex items-center justify-center">
+                        <img id="group-img-2" src="https://placehold.co/300x300/f3e8ff/9353d3?text=Group+2" alt="ตัวอย่างกลุ่ม 2" class="w-full h-full object-cover">
+                    </div>
+                    <p id="group-name-2" class="font-bold text-kawaii-text text-sm mb-2">กลุ่มของตกแต่ง 2</p>
+                    <a id="group-link-2" href="https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr" target="_blank" class="btn-kawaii w-full text-white text-xs py-2 px-3 rounded-full font-medium mt-auto">
+                        ดูตัวอย่าง
+                    </a>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="group-card-item border-2 border-pastel-purple/40 rounded-2xl p-3 bg-white flex flex-col items-center text-center shadow-sm hover:shadow-kawaii transition">
+                    <div class="w-full aspect-square rounded-xl bg-pastel-pinkLight mb-2.5 overflow-hidden border border-pastel-pink/30 flex items-center justify-center">
+                        <img id="group-img-3" src="https://placehold.co/300x300/faf5ff/9353d3?text=Group+3" alt="ตัวอย่างกลุ่ม 3" class="w-full h-full object-cover">
+                    </div>
+                    <p id="group-name-3" class="font-bold text-kawaii-text text-sm mb-2">กลุ่มตูน/บล็อก 3</p>
+                    <a id="group-link-3" href="https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr" target="_blank" class="btn-kawaii w-full text-white text-xs py-2 px-3 rounded-full font-medium mt-auto">
+                        ดูตัวอย่าง
+                    </a>
+                </div>
+
+                <!-- Card 4 -->
+                <div class="group-card-item border-2 border-pastel-purple/40 rounded-2xl p-3 bg-white flex flex-col items-center text-center shadow-sm hover:shadow-kawaii transition">
+                    <div class="w-full aspect-square rounded-xl bg-pastel-yellowLight mb-2.5 overflow-hidden border border-pastel-yellow/30 flex items-center justify-center">
+                        <img id="group-img-4" src="https://placehold.co/300x300/f5f3ff/9353d3?text=Group+4" alt="ตัวอย่างกลุ่ม 4" class="w-full h-full object-cover">
+                    </div>
+                    <p id="group-name-4" class="font-bold text-kawaii-text text-sm mb-2">กลุ่มรวมไฟล์ 4</p>
+                    <a id="group-link-4" href="https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr" target="_blank" class="btn-kawaii w-full text-white text-xs py-2 px-3 rounded-full font-medium mt-auto">
+                        ดูตัวอย่าง
+                    </a>
+                </div>
+            </div>
+
+            <!-- ปุ่มเพิ่มการ์ดตัวอย่างกลุ่มบนหน้าเว็บ (แสดงเมื่อเปิดโหมดแก้ไขหน้าเว็บ) -->
+            <div id="live-add-group-wrap" class="hidden mt-4 text-center">
+                <button type="button" onclick="addGroupFromLiveMode()" contenteditable="false" class="bg-pastel-purpleLight hover:bg-pastel-purple text-kawaii-highlight hover:text-white border-2 border-dashed border-pastel-purple px-4 py-2 rounded-full text-xs font-bold transition shadow-sm">
+                    + เพิ่มการ์ดตัวอย่างกลุ่มใหม่
+                </button>
+            </div>
+
+            <!-- คงโค้ดเดิมไว้ตามกฎห้ามลบ HTML Element แต่ซ่อนไว้ด้วย CSS -->
+            <div class="hidden space-y-3">
+                <!-- iOS Special -->
+                <div class="border border-pastel-purple/40 rounded-xl p-3 flex justify-between items-center bg-white">
+                    <div>
+                        <p class="font-bold text-kawaii-text">รุ่นพิเศษ (ถาวร) – iOS</p>
+                        <p class="text-xs text-pastel-purpleDark/80 mt-1">เมลรวม <span class="font-medium text-kawaii-highlight">20.-</span> | หาร 5 คน <span class="font-medium text-kawaii-highlight">149.-</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-pastel-purpleDark/80">ส่วนตัว</p>
+                        <p class="font-bold text-kawaii-highlight text-lg">490.-</p>
+                    </div>
+                </div>
+
+                <!-- Essential -->
+                <div class="border border-pastel-blue/40 rounded-xl p-3 flex justify-between items-center bg-white">
+                    <div>
+                        <p class="font-bold text-kawaii-text">Essential (รายปี)</p>
+                        <p class="text-xs text-pastel-purpleDark/80 mt-1">หาร 5 คน <span class="font-medium text-kawaii-highlight">79.-</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-pastel-purpleDark/80">ส่วนตัว</p>
+                        <p class="font-bold text-kawaii-highlight text-lg">229.-</p>
+                    </div>
+                </div>
+
+                <!-- Pro -->
+                <div class="border border-pastel-pink/40 rounded-xl p-3 flex justify-between items-center bg-white">
+                    <div>
+                        <p class="font-bold text-kawaii-text">Pro (รายปี)</p>
+                        <p class="text-xs text-pastel-purpleDark/80 mt-1">หาร 5 คน <span class="font-medium text-kawaii-highlight">149.-</span></p>
+                    </div>
+                    <div class="text-right">
+                        <p class="text-xs text-pastel-purpleDark/80">ส่วนตัว</p>
+                        <p class="font-bold text-kawaii-highlight text-lg">490.-</p>
+                    </div>
+                </div>
+            </div>
+
+            <p class="hidden text-center text-xs text-pastel-purpleDark/80 mt-4 bg-pastel-purpleLight p-2 rounded-lg">
+                * แนะนำใช้แบบส่วนตัว หากใช้ Android / Windows / Web
+            </p>
+        </section>
+
+        <!-- Contact (Clean minimal theme SVG) -->
+        <section id="contact" class="card-kawaii p-6 text-center">
+            <!-- Header แบบใหม่ -->
+            <div class="flex items-center bg-gradient-to-r from-kawaii-header to-transparent border-l-[6px] border-pastel-purple rounded-r-xl py-2.5 px-4 mb-6 shadow-sm text-left">
+                <span class="text-[20px] mr-3 shrink-0">💬</span>
+                <div class="flex items-baseline flex-wrap gap-x-2 mt-0.5">
+                    <h2 class="font-thai text-lg font-bold text-kawaii-text m-0">ช่องทางการติดต่อน่องแก้ม</h2>
+                    <span class="font-thai text-[13px] text-pastel-purpleDark opacity-80">- สั่งซื้อ/สอบถาม คลิกเลย -</span>
+                </div>
+            </div>
+            
+            <div class="flex justify-center gap-6">
+                <!-- Facebook -->
+                <a id="link-facebook" href="https://www.facebook.com/profile.php?id=61554192600355" target="_blank" class="group flex flex-col items-center gap-1">
+                    <div class="w-12 h-12 bg-pastel-blueLight rounded-full flex items-center justify-center border-2 border-pastel-blue/50 group-hover:bg-pastel-purpleDark group-hover:border-pastel-purpleDark transition-all">
+                        <svg class="w-6 h-6 text-pastel-purpleDark group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.04c-5.5 0-10 4.49-10 10.02 0 5 3.66 9.15 8.44 9.9v-7H7.9v-2.9h2.54V9.85c0-2.51 1.49-3.89 3.78-3.89 1.09 0 2.23.19 2.23.19v2.47h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.45 2.9h-2.33v7a10 10 0 008.44-9.9c0-5.53-4.5-10.02-10-10.02z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-pastel-purpleDark font-medium">Facebook</span>
+                </a>
+
+                <!-- Line -->
+                <a id="link-line" href="https://lin.ee/t0qYbAl" target="_blank" class="group flex flex-col items-center gap-1">
+                    <div class="w-12 h-12 bg-pastel-pinkLight rounded-full flex items-center justify-center border-2 border-pastel-pink/50 group-hover:bg-pastel-purpleDark group-hover:border-pastel-purpleDark transition-all">
+                        <svg class="w-6 h-6 text-pastel-purpleDark group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M21.4 10.3c0-4.3-4.2-7.8-9.4-7.8S2.6 6 2.6 10.3c0 3.8 3.3 7 7.7 7.7.3 0 .7.1.8.4l-.3 1.9c0 .1 0 .2.1.3s.2.1.3 0c1.7-1 6-3.6 7.6-5.5 1.7-1.7 2.6-3.4 2.6-4.8zm-13.6 2c-.3 0-.6-.3-.6-.6V8.9c0-.3.3-.6.6-.6s.6.3.6.6v2.1h1.5c.3 0 .6.3.6.6s-.3.6-.6.6H7.8zm4.4 0c-.3 0-.6-.3-.6-.6V8.9c0-.3.3-.6.6-.6s.6.3.6.6v2.8c0 .3-.3.6-.6.6zm3.3-1.6l-1.4-1.4c-.1-.1-.2-.2-.4-.2-.3 0-.6.3-.6.6v2.8c0 .3.3.6.6.6s.6-.3.6-.6v-1.9l1.4 1.4c.1.1.2.2.4.2.3 0 .6-.3.6-.6V8.9c0-.3-.3-.6-.6-.6s-.6.3-.6.6v1.8z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-pastel-purpleDark font-medium">Line</span>
+                </a>
+
+                <!-- Instagram (คงโค้ดไว้ตามคำสั่งห้ามลบ HTML Element แต่ซ่อนไว้ด้วย CSS) -->
+                <a href="https://www.instagram.com/pinkjulie.land" target="_blank" class="hidden group flex-col items-center gap-1">
+                    <div class="w-12 h-12 bg-pastel-purpleLight rounded-full flex items-center justify-center border-2 border-pastel-purple/50 group-hover:bg-pastel-purpleDark group-hover:border-pastel-purpleDark transition-all">
+                        <svg class="w-6 h-6 text-pastel-purpleDark group-hover:text-white transition-colors" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2.16c3.2 0 3.58.01 4.85.07 1.17.05 1.8.25 2.22.41.56.22.96.48 1.36.88.4.4.66.8.88 1.36.16.42.36 1.05.41 2.22.06 1.27.07 1.65.07 4.85s-.01 3.58-.07 4.85c-.05 1.17-.25 1.8-.41 2.22-.22.56-.48.96-.88 1.36-.4.4-.8.66-1.36.88-.42.16-1.05.36-2.22.41-1.27.06-1.65.07-4.85.07s-3.58-.01-4.85-.07c-1.17-.05-1.8-.25-2.22-.41-.56-.22-.96-.48-1.36-.88-.4-.4-.66-.8-.88-1.36-.16-.42-.36-1.05-.41-2.22-.06-1.27-.07-1.65-.07-4.85s.01-3.58.07-4.85c.05-1.17.25-1.8.41-2.22.22-.56.48-.96.88-1.36.4-.4.8-.66 1.36-.88.42-.16 1.05-.36 2.22-.41C8.42 2.17 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07c-1.27.06-2.14.26-2.9.56-.78.3-1.44.73-2.1 1.39-.66.66-1.09 1.32-1.39 2.1-.3.76-.5 1.63-.56 2.9C.01 8.33 0 8.74 0 12s.01 3.67.07 4.95c.06 1.27.26 2.14.56 2.9.3.78.73 1.44 1.39 2.1.66.66 1.32 1.09 2.1 1.39.76.3 1.63.5 2.9.56 1.28.06 1.69.07 4.95.07s3.67-.01 4.95-.07c1.27-.06 2.14-.26 2.9-.56.78-.3 1.44-.73 2.1-1.39.66-.66 1.09-1.32 1.39-2.1.3-.76.5-1.63.56-2.9.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.06-1.27-.26-2.14-.56-2.9-.3-.78-.73-1.44-1.39-2.1-.66-.66-1.32-1.09-2.1-1.39-.76-.3-1.63-.5-2.9-.56C15.67.01 15.26 0 12 0zm0 5.84A6.16 6.16 0 1018.16 12 6.16 6.16 0 0012 5.84zm0 10.16A4 4 0 1116 12a4 4 0 01-4 4zm5.8-9.66a1.44 1.44 0 11-2.88 0 1.44 1.44 0 012.88 0z"/>
+                        </svg>
+                    </div>
+                    <span class="text-xs text-pastel-purpleDark font-medium">Instagram</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-pastel-purpleDark/60 text-xs pb-6">
+            <p>&copy; 2024 แก้มใส คิคุอาโนเนะ. All rights reserved.</p>
+            <button onclick="openModal('modal-admin')" class="mt-2 inline-flex items-center gap-1 text-[11px] text-pastel-purpleDark/50 hover:text-kawaii-highlight transition-colors">
+                ⚙️ ระบบหลังบ้าน (Admin)
+            </button>
+        </footer>
+
+    </main>
+
+    <!-- Floating Admin Button -->
+    <button onclick="openModal('modal-admin')" title="ระบบหลังบ้าน (Admin)" class="fixed bottom-4 right-4 z-40 bg-white/90 backdrop-blur border-2 border-pastel-purple text-kawaii-highlight w-11 h-11 rounded-full shadow-kawaii flex items-center justify-center hover:scale-110 transition-transform focus:outline-none">
+        ⚙️
+    </button>
+
+    <!-- Modals Container -->
+    <!-- Modal: โทนสดใส -->
+    <div id="modal-bright" class="modal-overlay fixed inset-0 bg-pastel-purpleDark/40 z-50 flex items-center justify-center p-4">
+        <div class="modal-content card-kawaii w-full max-w-sm p-6 relative">
+            <button onclick="closeModal('modal-bright')" class="absolute -top-3 -right-3 bg-white border-2 border-pastel-yellow text-pastel-purpleDark rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-pastel-yellowLight focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 class="font-eng text-xl text-center text-kawaii-highlight font-bold mb-4 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-pastel-yellow" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg> โทนสดใส
+            </h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                <a href="https://jeans.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-yellowLight hover:bg-white rounded-xl border border-pastel-yellow/50 text-pastel-purpleDark transition">V.1 (Jeans)</a>
+                <a href="https://playing.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-yellowLight hover:bg-white rounded-xl border border-pastel-yellow/50 text-pastel-purpleDark transition">V.2 (Playing)</a>
+                <a href="https://note.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-yellowLight hover:bg-white rounded-xl border border-pastel-yellow/50 text-pastel-purpleDark transition">V.3 (Note)</a>
+                <a href="https://sodsai.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-yellowLight hover:bg-white rounded-xl border border-pastel-yellow/50 text-pastel-purpleDark transition">V.4 (Sodsai)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: โทนมืด -->
+    <div id="modal-dark" class="modal-overlay fixed inset-0 bg-pastel-purpleDark/40 z-50 flex items-center justify-center p-4">
+        <div class="modal-content card-kawaii w-full max-w-sm p-6 relative">
+            <button onclick="closeModal('modal-dark')" class="absolute -top-3 -right-3 bg-white border-2 border-pastel-blue text-pastel-purpleDark rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-pastel-blueLight focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 class="font-eng text-xl text-center text-kawaii-highlight font-bold mb-4 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-pastel-blue" viewBox="0 0 24 24"><use href="#icon-sparkle"></use></svg> โทนมืด
+            </h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                <a href="https://pinkdark.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.1 (Pinkdark)</a>
+                <a href="https://pinkblue.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.2 (Pinkblue)</a>
+                <a href="https://dd3.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.3 (DD3)</a>
+                <a href="https://jugame.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.4 (Jugame)</a>
+                <a href="https://moonpink.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.5 (Moonpink)</a>
+                <a href="https://shiny-thunder-d71e.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.6 (Shiny Thunder)</a>
+                <a href="https://blue.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.7 (Blue)</a>
+                <a href="https://lix.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-blueLight hover:bg-white rounded-xl border border-pastel-blue/50 text-pastel-purpleDark transition">V.8 (Lix)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: โทนพาสเทล -->
+    <div id="modal-pastel" class="modal-overlay fixed inset-0 bg-pastel-purpleDark/40 z-50 flex items-center justify-center p-4">
+        <div class="modal-content card-kawaii w-full max-w-sm p-6 relative">
+            <button onclick="closeModal('modal-pastel')" class="absolute -top-3 -right-3 bg-white border-2 border-pastel-purple text-pastel-purpleDark rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-pastel-purpleLight focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            <h3 class="font-eng text-xl text-center text-kawaii-highlight font-bold mb-4 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-pastel-purple" viewBox="0 0 24 24"><use href="#icon-heart"></use></svg> โทนพาสเทล
+            </h3>
+            <div class="space-y-2 max-h-60 overflow-y-auto pr-2 custom-scrollbar">
+                <a href="https://wish-uwu.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.1 (Wish uwu)</a>
+                <a href="https://regal-torrone-46c94f.netlify.app/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.2 (Regal Torrone)</a>
+                <a href="https://cawaei.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.3 (Cawaei)</a>
+                <a href="https://meww.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.4 (Meww)</a>
+                <a href="https://duduw.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.5 (Duduw)</a>
+                <a href="https://pinks.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.6 (Pinks)</a>
+                <a href="https://small-wind-001f.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.7 (Small Wind)</a>
+                <a href="https://sweetie.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.8 (Sweetie)</a>
+                <a href="https://pmju.cozyw75.workers.dev/" target="_blank" class="block w-full text-center py-2 px-4 bg-pastel-purpleLight hover:bg-white rounded-xl border border-pastel-purple/50 text-pastel-purpleDark transition">V.9 (Pmju)</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: ระบบหลังบ้าน (Admin Panel) -->
+    <div id="modal-admin" class="modal-overlay fixed inset-0 bg-pastel-purpleDark/40 z-50 flex items-center justify-center p-4">
+        <div class="modal-content card-kawaii w-full max-w-md p-6 relative max-h-[90vh] flex flex-col">
+            <button onclick="closeModal('modal-admin')" class="absolute -top-3 -right-3 bg-white border-2 border-pastel-purple text-pastel-purpleDark rounded-full w-8 h-8 flex items-center justify-center shadow-md hover:bg-pastel-purpleLight focus:outline-none">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+            
+            <h3 class="font-thai text-xl text-center text-kawaii-highlight font-bold mb-4 flex items-center justify-center gap-2">
+                <span>⚙️</span> ระบบหลังบ้านร้านแก้มใส
+            </h3>
+
+            <!-- หน้าล็อกอินแอดมิน -->
+            <div id="admin-login-view" class="space-y-4">
+                <p class="text-xs text-center text-pastel-purpleDark">กรุณากรอกรหัสผ่านเพื่อเข้าสู่ระบบแก้ไขข้อมูลเว็บ<br><span class="opacity-70">(รหัสเริ่มต้น: 1234)</span></p>
+                <div>
+                    <input type="password" id="admin-password-input" placeholder="รหัสผ่านแอดมิน..." class="w-full px-4 py-2.5 rounded-xl border-2 border-pastel-purple/50 focus:border-kawaii-highlight focus:outline-none text-sm text-center">
+                    <p id="admin-login-error" class="text-xs text-red-400 text-center mt-1 hidden">รหัสผ่านไม่ถูกต้องค่ะ ลองใหม่อีกครั้งนะคะ</p>
+                </div>
+                <button onclick="verifyAdminLogin()" class="btn-kawaii w-full text-white py-2.5 rounded-xl font-medium text-sm">เข้าสู่ระบบ</button>
+            </div>
+
+            <!-- หน้าจัดการระบบหลังบ้าน -->
+            <div id="admin-dashboard-view" class="hidden overflow-y-auto pr-1 space-y-4 text-sm custom-scrollbar">
+                <!-- โหมดแก้ไขทุกจุดบนหน้าเว็บ -->
+                <div class="bg-pastel-purpleLight/70 p-3.5 rounded-2xl border border-pastel-purple/50 flex items-center justify-between">
+                    <div>
+                        <p class="font-bold text-kawaii-text text-xs">✏️ โหมดคลิกแก้ไขบนหน้าเว็บโดยตรง (ทุกจุด)</p>
+                        <p class="text-[11px] text-pastel-purpleDark">เปิดเพื่อคลิกแก้ข้อความ, คลิกที่รูปเพื่อเปลี่ยนรูป, หรือคลิกปุ่มเพื่อเปลี่ยนลิงก์ได้ทุกจุด!</p>
+                    </div>
+                    <input type="checkbox" id="toggle-live-edit" onchange="toggleLiveEditMode(this.checked)" class="w-5 h-5 accent-purple-600 rounded cursor-pointer shrink-0 ml-2">
+                </div>
+
+                <!-- ตั้งค่าชื่อร้าน & สถานะร้าน -->
+                <div class="space-y-2.5 bg-white p-3.5 rounded-2xl border border-pastel-purple/30">
+                    <p class="text-xs font-bold text-pastel-purpleDark">🏠 ตั้งค่าชื่อร้าน & สถานะร้าน</p>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">ชื่อร้าน (แสดงหัวเว็บที่มีขอบขาว):</label>
+                        <input type="text" id="admin-shop-title" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="เช่น แก้มใส คิคุอาโนเนะ">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">ข้อความรองใต้ชื่อร้าน:</label>
+                        <input type="text" id="admin-shop-subtitle" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="เช่น Welcome to my shop">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">สถานะร้าน / แถบเช็คคิวงาน:</label>
+                        <input type="text" id="admin-status-text" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="เช่น เปิดให้บริการแล้ว">
+                    </div>
+                </div>
+
+                <!-- ตั้งค่าลิงก์ปุ่มหลักทั้งหมด -->
+                <div class="space-y-2.5 bg-white p-3.5 rounded-2xl border border-pastel-purple/30">
+                    <p class="text-xs font-bold text-pastel-purpleDark">🔗 ตั้งค่าชื่อปุ่ม & ลิงก์ต่างๆ</p>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">ปุ่มตัวอย่างผลงานร้านแก้ม (ชื่อปุ่ม & ลิงก์):</label>
+                        <input type="text" id="admin-drive-text" class="w-full px-3 py-1.5 mb-1 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="ชื่อปุ่ม...">
+                        <input type="url" id="admin-drive-url" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">ปุ่มของตกแต่ง (ชื่อปุ่ม & ลิงก์):</label>
+                        <input type="text" id="admin-decor-text" class="w-full px-3 py-1.5 mb-1 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="🎀 คลิกเลือกดูของตกแต่ง">
+                        <input type="url" id="admin-decor-url" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">ปุ่มดูตูน (ชื่อปุ่ม & ลิงก์):</label>
+                        <input type="text" id="admin-toon-text" class="w-full px-3 py-1.5 mb-1 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="🧸 คลิกเลือกดูตูน">
+                        <input type="url" id="admin-toon-url" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="https://...">
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-pastel-purpleDark mb-1">ปุ่มดูบล็อก (ชื่อปุ่ม & ลิงก์):</label>
+                        <input type="text" id="admin-block-text" class="w-full px-3 py-1.5 mb-1 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="🧊 คลิกเลือกดูบล็อก">
+                        <input type="url" id="admin-block-url" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight" placeholder="https://...">
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 pt-1">
+                        <div>
+                            <label class="block text-[11px] text-pastel-purpleDark mb-1">ลิงก์ Facebook:</label>
+                            <input type="url" id="admin-fb-url" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] text-pastel-purpleDark mb-1">ลิงก์ Line:</label>
+                <!-- ตั้งค่าการ์ดตัวอย่างกลุ่ม (เพิ่ม/ลบ/เปลี่ยนชื่อ/เปลี่ยนรูป/เปลี่ยนลิงก์) -->
+                <div class="space-y-3 bg-white p-3.5 rounded-2xl border border-pastel-purple/30">
+                    <div class="flex items-center justify-between">
+                        <p class="text-xs font-bold text-pastel-purpleDark">🖼️ แก้ไขการ์ดตัวอย่างกลุ่ม (เพิ่ม/ลบได้)</p>
+                        <button type="button" onclick="addAdminGroupCard()" class="bg-pastel-purpleLight hover:bg-pastel-purple text-kawaii-highlight hover:text-white px-2.5 py-1 rounded-full text-[11px] font-bold border border-pastel-purple transition">
+                            + เพิ่มการ์ดกลุ่ม
+                        </button>
+                    </div>
+                    <div id="admin-groups-editor" class="space-y-3">
+                        <!-- สร้างฟอร์มแก้ไขการ์ดอัตโนมัติ -->
+                    </div>
+                </div>
+
+                <!-- เปลี่ยนรหัสผ่านแอดมิน -->
+                <div class="space-y-2 bg-white p-3.5 rounded-2xl border border-pastel-purple/30">
+                    <label class="block text-xs font-bold text-pastel-purpleDark">🔑 เปลี่ยนรหัสผ่านหลังบ้านใหม่ (เว้นว่างไว้หากไม่เปลี่ยน)</label>
+                    <input type="password" id="admin-new-pin" placeholder="ตั้งรหัสผ่านใหม่..." class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none focus:border-kawaii-highlight">
+                </div>
+
+                <div id="admin-save-msg" class="hidden text-center text-xs text-purple-700 bg-purple-100 py-2 rounded-xl font-medium">
+                    ✅ บันทึกข้อมูลครบทุกจุดเรียบร้อยแล้วค่ะ!
+                </div>
+
+                <div class="flex gap-2 pt-1">
+                    <button onclick="saveAdminConfig()" class="btn-kawaii flex-1 text-white py-2.5 rounded-xl font-medium text-xs">💾 บันทึกการตั้งค่าทั้งหมด</button>
+                    <button onclick="resetAdminConfig()" class="bg-pastel-purpleLight hover:bg-pastel-purple/40 text-pastel-purpleDark px-4 py-2.5 rounded-xl font-medium text-xs transition">คืนค่าเริ่มต้น</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal ย่อยสำหรับคลิกเปลี่ยนรูปหรือลิงก์โดยตรงขณะอยู่ในโหมด Live Edit -->
+    <div id="modal-element-editor" class="modal-overlay fixed inset-0 bg-pastel-purpleDark/40 z-50 flex items-center justify-center p-4">
+        <div class="modal-content card-kawaii w-full max-w-sm p-5 relative space-y-3 text-sm">
+            <h4 id="elem-editor-title" class="font-bold text-kawaii-highlight text-center">แก้ไขข้อมูล</h4>
+            <div id="elem-editor-text-wrap">
+                <label class="block text-xs text-pastel-purpleDark mb-1">ข้อความ / ชื่อ:</label>
+                <input type="text" id="elem-editor-text" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none">
+            </div>
+            <div id="elem-editor-url-wrap">
+                <label id="elem-editor-url-label" class="block text-xs text-pastel-purpleDark mb-1">ลิงก์ URL / ที่อยู่รูปภาพ:</label>
+                <input type="text" id="elem-editor-url" class="w-full px-3 py-1.5 rounded-xl border border-pastel-purple/50 text-xs focus:outline-none">
+            </div>
+            <div id="elem-editor-file-wrap" class="hidden">
+                <label class="block text-xs text-pastel-purpleDark mb-1">หรืออัปโหลดรูปจากเครื่อง:</label>
+                <input type="file" id="elem-editor-file" accept="image/*" class="w-full text-xs text-pastel-purpleDark file:mr-2 file:py-1 file:px-3 file:rounded-full file:border-0 file:text-xs file:bg-pastel-purpleLight file:text-kawaii-highlight">
+            </div>
+            <div class="flex gap-2 pt-2">
+                <button onclick="applyElementEdit()" class="btn-kawaii flex-1 text-white py-2 rounded-xl text-xs font-medium">ตกลง</button>
+                <button onclick="closeModal('modal-element-editor')" class="bg-pastel-purpleLight text-pastel-purpleDark px-4 py-2 rounded-xl text-xs font-medium">ยกเลิก</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- แถบแจ้งเตือนขณะเปิดโหมดแก้ไขหน้าเว็บโดยตรง -->
+    <div id="live-edit-banner" class="hidden fixed bottom-4 left-4 right-16 z-40 bg-kawaii-highlight text-white px-4 py-2.5 rounded-2xl shadow-lg flex flex-wrap items-center justify-between gap-2 text-xs">
+        <span>✏️ โหมดแก้ไขทุกจุด: คลิกแก้ข้อความ, คลิกรูปเพื่อเปลี่ยนรูป, คลิกปุ่มเพื่อแก้ลิงก์</span>
+        <button onclick="saveLiveEditedContent()" class="bg-white text-kawaii-highlight px-3 py-1 rounded-xl font-bold shadow-sm hover:bg-pastel-purpleLight transition shrink-0">💾 บันทึกหน้าเว็บ</button>
+    </div>
+
+    <!-- Interactive Scripts -->
+    <script>
+        // Sidebar logic
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            
+            if (sidebar.classList.contains('-translate-x-full')) {
+                // Open
+                sidebar.classList.remove('-translate-x-full');
+                overlay.classList.remove('opacity-0', 'invisible');
+                overlay.classList.add('opacity-100', 'visible');
+                document.body.style.overflow = 'hidden';
+            } else {
+                // Close
+                sidebar.classList.add('-translate-x-full');
+                overlay.classList.remove('opacity-100', 'visible');
+                overlay.classList.add('opacity-0', 'invisible');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // Modal logic
+        function openModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal-overlay')) {
+                event.target.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        // ==========================================
+        // ระบบหลังบ้านแบบครบวงจร (Full Admin Panel System)
+        // ==========================================
+        const ADMIN_STORAGE_KEY = 'kamsai_shop_admin_config_v2';
+        const ADMIN_BODY_HTML_KEY = 'kamsai_shop_live_text_v2';
+        let currentEditingElement = null;
+
+        function getDefaultGroups() {
+            return [
+                { name: 'กลุ่มของตกแต่ง 1', img: 'https://placehold.co/300x300/f5eeff/9353d3?text=Group+1', url: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr' },
+                { name: 'กลุ่มของตกแต่ง 2', img: 'https://placehold.co/300x300/f3e8ff/9353d3?text=Group+2', url: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr' },
+                { name: 'กลุ่มตูน/บล็อก 3', img: 'https://placehold.co/300x300/faf5ff/9353d3?text=Group+3', url: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr' },
+                { name: 'กลุ่มรวมไฟล์ 4', img: 'https://placehold.co/300x300/f5f3ff/9353d3?text=Group+4', url: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr' }
+            ];
+        }
+
+        function getAdminConfig() {
+            const saved = localStorage.getItem(ADMIN_STORAGE_KEY);
+            const defaults = {
+                pin: '1234',
+                shopTitle: 'แก้มใส คิคุอาโนเนะ',
+                shopSubtitle: 'Welcome to my shop',
+                statusText: 'เปิดให้บริการแล้ว',
+                driveText: 'ตัวอย่างผลงานต่างๆร้านแก้ม คลิกเลย',
+                driveUrl: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr',
+                decorText: '🎀 คลิกเลือกดูของตกแต่ง',
+                decorUrl: 'https://drive.google.com/drive/folders/1y4siEIS7i8XjYICoxJ_-fJH9ffywo92L',
+                toonText: '🧸 คลิกเลือกดูตูน',
+                toonUrl: 'https://drive.google.com/drive/folders/1y4siEIS7i8XjYICoxJ_-fJH9ffywo92L',
+                blockText: '🧊 คลิกเลือกดูบล็อก',
+                blockUrl: 'https://drive.google.com/drive/folders/1y4siEIS7i8XjYICoxJ_-fJH9ffywo92L',
+                fbUrl: 'https://www.facebook.com/profile.php?id=61554192600355',
+                lineUrl: 'https://lin.ee/t0qYbAl',
+                groups: getDefaultGroups()
+            };
+            if (saved) {
+                try {
+                    const parsed = JSON.parse(saved);
+                    return Object.assign({}, defaults, parsed, {
+                        groups: Array.isArray(parsed.groups) ? parsed.groups : defaults.groups
+                    });
+                } catch (e) {}
+            }
+            return defaults;
+        }
+
+        let editingGroupsState = [];
+
+        function renderGroupCardsOnPage(groups, isLiveEdit = false) {
+            const grid = document.getElementById('group-cards-grid');
+            if (!grid || !Array.isArray(groups)) return;
+
+            const bgClasses = [
+                'bg-pastel-purpleLight border-pastel-purple/30',
+                'bg-pastel-blueLight border-pastel-blue/30',
+                'bg-pastel-pinkLight border-pastel-pink/30',
+                'bg-pastel-yellowLight border-pastel-yellow/30'
+            ];
+
+            grid.innerHTML = groups.map((g, idx) => {
+                const num = idx + 1;
+                const colorCls = bgClasses[idx % bgClasses.length];
+                const safeName = (g.name || `กลุ่มที่ ${num}`).replace(/"/g, '&quot;');
+                const safeImg = (g.img || `https://placehold.co/300x300/f5eeff/9353d3?text=Group+${num}`).replace(/"/g, '&quot;');
+                const safeUrl = (g.url || '#').replace(/"/g, '&quot;');
+                const deleteBtnHtml = isLiveEdit
+                    ? `<button type="button" contenteditable="false" onclick="removeGroupFromLiveMode(${idx})" title="ลบการ์ดนี้" class="absolute -top-2 -right-2 bg-red-400 hover:bg-red-500 text-white w-6 h-6 rounded-full text-xs font-bold shadow flex items-center justify-center z-10">✕</button>`
+                    : '';
+
+                return `
+                <div class="group-card-item relative border-2 border-pastel-purple/40 rounded-2xl p-3 bg-white flex flex-col items-center text-center shadow-sm hover:shadow-kawaii transition">
+                    ${deleteBtnHtml}
+                    <div class="w-full aspect-square rounded-xl ${colorCls} mb-2.5 overflow-hidden border flex items-center justify-center">
+                        <img id="group-img-${num}" src="${safeImg}" alt="${safeName}" class="w-full h-full object-cover">
+                    </div>
+                    <p id="group-name-${num}" class="font-bold text-kawaii-text text-sm mb-2">${g.name || `กลุ่มที่ ${num}`}</p>
+                    <a id="group-link-${num}" href="${safeUrl}" target="_blank" class="btn-kawaii w-full text-white text-xs py-2 px-3 rounded-full font-medium mt-auto">
+                        ${g.btnText || 'ดูตัวอย่าง'}
+                    </a>
+                </div>`;
+            }).join('');
+        }
+
+        function syncDOMGroupsToConfig() {
+            const cards = document.querySelectorAll('#group-cards-grid .group-card-item');
+            if (!cards.length) return;
+            const cfg = getAdminConfig();
+            const updated = [];
+            cards.forEach((card, idx) => {
+                const imgEl = card.querySelector('img');
+                const nameEl = card.querySelector('p');
+                const linkEl = card.querySelector('a');
+                updated.push({
+                    name: nameEl ? nameEl.textContent.trim() : `กลุ่มที่ ${idx + 1}`,
+                    img: imgEl ? imgEl.getAttribute('src') : '',
+                    url: linkEl ? linkEl.getAttribute('href') : '#',
+                    btnText: linkEl ? linkEl.textContent.trim() : 'ดูตัวอย่าง'
+                });
+            });
+            cfg.groups = updated;
+            localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(cfg));
+        }
+
+        function addGroupFromLiveMode() {
+            syncDOMGroupsToConfig();
+            const cfg = getAdminConfig();
+            const nextNum = (cfg.groups ? cfg.groups.length : 0) + 1;
+            cfg.groups.push({
+                name: `กลุ่มตัวอย่าง ${nextNum}`,
+                img: `https://placehold.co/300x300/f5eeff/9353d3?text=Group+${nextNum}`,
+                url: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr',
+                btnText: 'ดูตัวอย่าง'
+            });
+            localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(cfg));
+            renderGroupCardsOnPage(cfg.groups, true);
+        }
+
+        function removeGroupFromLiveMode(idx) {
+            syncDOMGroupsToConfig();
+            const cfg = getAdminConfig();
+            if (!cfg.groups || idx < 0 || idx >= cfg.groups.length) return;
+            cfg.groups.splice(idx, 1);
+            localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(cfg));
+            renderGroupCardsOnPage(cfg.groups, true);
+        }
+
+        function applyAdminConfig() {
+            const cfg = getAdminConfig();
+
+            // อัปเดตชื่อร้านทั้งเลเยอร์ขอบขาวและเลเยอร์สีไล่ระดับ
+            const titleStroke = document.getElementById('shop-title-stroke') || document.querySelector('#home h1[aria-hidden="true"]');
+            const titleMain = document.getElementById('shop-title-main') || document.querySelectorAll('#home h1')[1];
+            if (titleStroke && cfg.shopTitle) titleStroke.textContent = cfg.shopTitle;
+            if (titleMain && cfg.shopTitle) titleMain.textContent = cfg.shopTitle;
+            if (cfg.shopTitle) document.title = cfg.shopTitle;
+
+            const subEl = document.getElementById('shop-subtitle') || document.querySelector('#home p.font-eng');
+            if (subEl && cfg.shopSubtitle) subEl.textContent = cfg.shopSubtitle;
+
+            // อัปเดตข้อความสถานะร้านด้านบน
+            const statusSpan = document.getElementById('shop-status-badge') || document.querySelector('#home .mt-6 span');
+            if (statusSpan && cfg.statusText) {
+                statusSpan.textContent = cfg.statusText;
+            }
+
+            // อัปเดตปุ่มผลงานและปุ่มเลือกของตกแต่ง/ตูน/บล็อก
+            const driveBtn = document.getElementById('btn-portfolio-drive');
+            if (driveBtn) {
+                if (cfg.driveUrl) driveBtn.href = cfg.driveUrl;
+                const span = driveBtn.querySelector('span');
+                if (span && cfg.driveText) span.textContent = cfg.driveText;
+            }
+
+            const decorBtn = document.getElementById('btn-decor');
+            if (decorBtn) {
+                if (cfg.decorUrl) decorBtn.href = cfg.decorUrl;
+                if (cfg.decorText) decorBtn.textContent = cfg.decorText;
+            }
+
+            const toonBtn = document.getElementById('btn-toon');
+            if (toonBtn) {
+                if (cfg.toonUrl) toonBtn.href = cfg.toonUrl;
+                if (cfg.toonText) toonBtn.textContent = cfg.toonText;
+            }
+
+            const blockBtn = document.getElementById('btn-block');
+            if (blockBtn) {
+                if (cfg.blockUrl) blockBtn.href = cfg.blockUrl;
+                if (cfg.blockText) blockBtn.textContent = cfg.blockText;
+            }
+
+            const fbLink = document.getElementById('link-facebook');
+            if (fbLink && cfg.fbUrl) fbLink.href = cfg.fbUrl;
+
+            const lineLink = document.getElementById('link-line');
+            if (lineLink && cfg.lineUrl) lineLink.href = cfg.lineUrl;
+
+            // อัปเดตการ์ดตัวอย่างกลุ่มทั้งหมดตามรายการในหลังบ้าน
+            const mainEl = document.querySelector('main');
+            const isLive = mainEl && mainEl.getAttribute('contenteditable') === 'true';
+            if (cfg.groups && Array.isArray(cfg.groups)) {
+                renderGroupCardsOnPage(cfg.groups, isLive);
+            }
+        }
+
+        function syncEditingGroupsFromInputs() {
+            if (!Array.isArray(editingGroupsState)) return;
+            editingGroupsState = editingGroupsState.map((g, idx) => {
+                const nameInput = document.getElementById('admin-grp-name-' + idx);
+                const imgInput = document.getElementById('admin-grp-img-' + idx);
+                const urlInput = document.getElementById('admin-grp-url-' + idx);
+                return {
+                    name: nameInput ? nameInput.value : g.name,
+                    img: imgInput ? imgInput.value : g.img,
+                    url: urlInput ? urlInput.value : g.url,
+                    btnText: g.btnText || 'ดูตัวอย่าง'
+                };
+            });
+        }
+
+        function addAdminGroupCard() {
+            syncEditingGroupsFromInputs();
+            const nextNum = editingGroupsState.length + 1;
+            editingGroupsState.push({
+                name: `กลุ่มตัวอย่าง ${nextNum}`,
+                img: `https://placehold.co/300x300/f5eeff/9353d3?text=Group+${nextNum}`,
+                url: 'https://drive.google.com/drive/folders/1fj024BhkgC1ctJeiwyZUG3USteSdzWzr',
+                btnText: 'ดูตัวอย่าง'
+            });
+            renderAdminGroupsEditor(editingGroupsState);
+        }
+
+        function removeAdminGroupCard(idx) {
+            syncEditingGroupsFromInputs();
+            editingGroupsState.splice(idx, 1);
+            renderAdminGroupsEditor(editingGroupsState);
+        }
+
+        function renderAdminGroupsEditor(groups) {
+            editingGroupsState = Array.isArray(groups) ? groups.map(g => Object.assign({}, g)) : [];
+            const container = document.getElementById('admin-groups-editor');
+            if (!container) return;
+            container.innerHTML = '';
+
+            if (editingGroupsState.length === 0) {
+                container.innerHTML = `<p class="text-xs text-center text-pastel-purpleDark/70 py-2">ยังไม่มีการ์ดกลุ่ม กดปุ่ม "+ เพิ่มการ์ดกลุ่ม" ด้านบนได้เลยค่ะ</p>`;
+                return;
+            }
+
+            editingGroupsState.forEach((g, idx) => {
+                const block = document.createElement('div');
+                block.className = 'p-2.5 rounded-xl bg-pastel-purpleLight/40 border border-pastel-purple/30 space-y-1.5';
+                block.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <p class="text-[11px] font-bold text-kawaii-highlight">การ์ดกลุ่มที่ ${idx + 1}</p>
+                        <button type="button" onclick="removeAdminGroupCard(${idx})" class="text-[10px] bg-red-100 hover:bg-red-200 text-red-500 px-2 py-0.5 rounded-full font-medium transition">🗑️ ลบการ์ดนี้</button>
+                    </div>
+                    <input type="text" id="admin-grp-name-${idx}" value="${(g.name || '').replace(/"/g, '&quot;')}" placeholder="ชื่อกลุ่ม..." class="w-full px-2.5 py-1 rounded-lg border border-pastel-purple/40 text-xs">
+                    <input type="text" id="admin-grp-img-${idx}" value="${(g.img || '').replace(/"/g, '&quot;')}" placeholder="ลิงก์รูปภาพ (URL)..." class="w-full px-2.5 py-1 rounded-lg border border-pastel-purple/40 text-xs">
+                    <div class="flex items-center gap-2">
+                        <label class="text-[10px] text-pastel-purpleDark shrink-0">หรืออัปโหลดรูป:</label>
+                        <input type="file" accept="image/*" onchange="handleAdminGroupImageUpload(${idx}, this)" class="text-[10px] text-pastel-purpleDark file:mr-2 file:py-0.5 file:px-2 file:rounded-full file:border-0 file:bg-white file:text-kawaii-highlight">
+                    </div>
+                    <input type="url" id="admin-grp-url-${idx}" value="${(g.url || '').replace(/"/g, '&quot;')}" placeholder="ลิงก์ปุ่มดูตัวอย่าง..." class="w-full px-2.5 py-1 rounded-lg border border-pastel-purple/40 text-xs">
+                `;
+                container.appendChild(block);
+            });
+        }
+
+        function handleAdminGroupImageUpload(idx, fileInput) {
+            const file = fileInput.files && fileInput.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imgInput = document.getElementById('admin-grp-img-' + idx);
+                if (imgInput) imgInput.value = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function verifyAdminLogin() {
+            const input = document.getElementById('admin-password-input').value;
+            const cfg = getAdminConfig();
+            const errEl = document.getElementById('admin-login-error');
+
+            if (input === cfg.pin) {
+                errEl.classList.add('hidden');
+                document.getElementById('admin-login-view').classList.add('hidden');
+                document.getElementById('admin-dashboard-view').classList.remove('hidden');
+                // โหลดค่าปัจจุบันใส่ฟอร์ม
+                document.getElementById('admin-shop-title').value = cfg.shopTitle || '';
+                document.getElementById('admin-shop-subtitle').value = cfg.shopSubtitle || '';
+                document.getElementById('admin-status-text').value = cfg.statusText || '';
+                document.getElementById('admin-drive-text').value = cfg.driveText || '';
+                document.getElementById('admin-drive-url').value = cfg.driveUrl || '';
+                document.getElementById('admin-decor-text').value = cfg.decorText || '';
+                document.getElementById('admin-decor-url').value = cfg.decorUrl || '';
+                document.getElementById('admin-toon-text').value = cfg.toonText || '';
+                document.getElementById('admin-toon-url').value = cfg.toonUrl || '';
+                document.getElementById('admin-block-text').value = cfg.blockText || '';
+                document.getElementById('admin-block-url').value = cfg.blockUrl || '';
+                document.getElementById('admin-fb-url').value = cfg.fbUrl || '';
+                document.getElementById('admin-line-url').value = cfg.lineUrl || '';
+                renderAdminGroupsEditor(cfg.groups || getDefaultGroups());
+            } else {
+                errEl.classList.remove('hidden');
+            }
+        }
+
+        function saveAdminConfig() {
+            const cfg = getAdminConfig();
+            cfg.shopTitle = document.getElementById('admin-shop-title').value.trim() || 'แก้มใส คิคุอาโนเนะ';
+            cfg.shopSubtitle = document.getElementById('admin-shop-subtitle').value.trim() || 'Welcome to my shop';
+            cfg.statusText = document.getElementById('admin-status-text').value.trim() || 'เปิดให้บริการแล้ว';
+            cfg.driveText = document.getElementById('admin-drive-text').value.trim() || 'ตัวอย่างผลงานต่างๆร้านแก้ม คลิกเลย';
+            cfg.driveUrl = document.getElementById('admin-drive-url').value.trim();
+            cfg.decorText = document.getElementById('admin-decor-text').value.trim() || '🎀 คลิกเลือกดูของตกแต่ง';
+            cfg.decorUrl = document.getElementById('admin-decor-url').value.trim();
+            cfg.toonText = document.getElementById('admin-toon-text').value.trim() || '🧸 คลิกเลือกดูตูน';
+            cfg.toonUrl = document.getElementById('admin-toon-url').value.trim();
+            cfg.blockText = document.getElementById('admin-block-text').value.trim() || '🧊 คลิกเลือกดูบล็อก';
+            cfg.blockUrl = document.getElementById('admin-block-url').value.trim();
+            cfg.fbUrl = document.getElementById('admin-fb-url').value.trim();
+            cfg.lineUrl = document.getElementById('admin-line-url').value.trim();
+
+            syncEditingGroupsFromInputs();
+            cfg.groups = editingGroupsState.map((g, idx) => ({
+                name: (g.name || '').trim() || `กลุ่มที่ ${idx + 1}`,
+                img: (g.img || '').trim() || `https://placehold.co/300x300/f5eeff/9353d3?text=Group+${idx + 1}`,
+                url: (g.url || '').trim() || '#',
+                btnText: g.btnText || 'ดูตัวอย่าง'
+            }));
+
+            const newPin = document.getElementById('admin-new-pin').value.trim();
+            if (newPin) {
+                cfg.pin = newPin;
+                document.getElementById('admin-new-pin').value = '';
+            }
+
+            localStorage.setItem(ADMIN_STORAGE_KEY, JSON.stringify(cfg));
+            applyAdminConfig();
+
+            // บันทึก HTML ปัจจุบันลง Live Text ด้วยเพื่อให้ซิงก์กันทุกจุด
+            const mainEl = document.querySelector('main');
+            if (mainEl) localStorage.setItem(ADMIN_BODY_HTML_KEY, mainEl.innerHTML);
+
+            const msg = document.getElementById('admin-save-msg');
+            msg.classList.remove('hidden');
+            setTimeout(() => msg.classList.add('hidden'), 2500);
+        }
+
+        function resetAdminConfig() {
+            localStorage.removeItem(ADMIN_STORAGE_KEY);
+            localStorage.removeItem(ADMIN_BODY_HTML_KEY);
+            location.reload();
+        }
+
+        function toggleLiveEditMode(enabled) {
+            const mainEl = document.querySelector('main');
+            const banner = document.getElementById('live-edit-banner');
+            const addGroupWrap = document.getElementById('live-add-group-wrap');
+            const cfg = getAdminConfig();
+            if (enabled) {
+                mainEl.setAttribute('contenteditable', 'true');
+                mainEl.classList.add('ring-2', 'ring-pastel-purple', 'rounded-3xl');
+                banner.classList.remove('hidden');
+                if (addGroupWrap) addGroupWrap.classList.remove('hidden');
+                renderGroupCardsOnPage(cfg.groups || getDefaultGroups(), true);
+                closeModal('modal-admin');
+            } else {
+                syncDOMGroupsToConfig();
+                const updatedCfg = getAdminConfig();
+                renderGroupCardsOnPage(updatedCfg.groups || getDefaultGroups(), false);
+                mainEl.removeAttribute('contenteditable');
+                mainEl.classList.remove('ring-2', 'ring-pastel-purple', 'rounded-3xl');
+                banner.classList.add('hidden');
+                if (addGroupWrap) addGroupWrap.classList.add('hidden');
+            }
+        }
+
+        // ซิงก์ชื่อร้าน 2 เลเยอร์อัตโนมัติเวลาพิมพ์แก้ไขบนหน้าเว็บโดยตรง
+        document.addEventListener('input', function(e) {
+            const mainEl = document.querySelector('main');
+            if (!mainEl || mainEl.getAttribute('contenteditable') !== 'true') return;
+            const titleMain = document.getElementById('shop-title-main');
+            const titleStroke = document.getElementById('shop-title-stroke');
+            if (titleMain && titleStroke && (e.target === titleMain || titleMain.contains(e.target))) {
+                titleStroke.textContent = titleMain.textContent;
+            }
+        });
+
+        // คลิกที่รูปภาพ (<img>) หรือปุ่มลิงก์ (<a>) ขณะเปิดโหมดแก้ไขบนหน้าเว็บเพื่อเปลี่ยนรูป/เปลี่ยนลิงก์ได้ทันที
+        document.addEventListener('click', function(e) {
+            const mainEl = document.querySelector('main');
+            if (!mainEl || mainEl.getAttribute('contenteditable') !== 'true') return;
+
+            const imgTarget = e.target.closest('img');
+            const linkTarget = e.target.closest('a');
+
+            if (imgTarget && mainEl.contains(imgTarget)) {
+                e.preventDefault();
+                currentEditingElement = { type: 'img', el: imgTarget };
+                document.getElementById('elem-editor-title').textContent = '🖼️ เปลี่ยนรูปภาพ';
+                document.getElementById('elem-editor-text-wrap').classList.add('hidden');
+                document.getElementById('elem-editor-url-label').textContent = 'ลิงก์รูปภาพ (Image URL):';
+                document.getElementById('elem-editor-url').value = imgTarget.src || '';
+                document.getElementById('elem-editor-file-wrap').classList.remove('hidden');
+                document.getElementById('elem-editor-file').value = '';
+                openModal('modal-element-editor');
+            } else if (linkTarget && mainEl.contains(linkTarget)) {
+                e.preventDefault();
+                currentEditingElement = { type: 'link', el: linkTarget };
+                document.getElementById('elem-editor-title').textContent = '🔗 แก้ไขปุ่ม / ลิงก์';
+                document.getElementById('elem-editor-text-wrap').classList.remove('hidden');
+                const innerSpan = linkTarget.querySelector('span');
+                document.getElementById('elem-editor-text').value = innerSpan ? innerSpan.textContent : linkTarget.textContent.trim();
+                document.getElementById('elem-editor-url-label').textContent = 'ลิงก์ปลายทาง (URL):';
+                document.getElementById('elem-editor-url').value = linkTarget.getAttribute('href') || '';
+                document.getElementById('elem-editor-file-wrap').classList.add('hidden');
+                openModal('modal-element-editor');
+            }
+        });
+
+        // อัปโหลดไฟล์รูปใน Modal ย่อย
+        document.getElementById('elem-editor-file').addEventListener('change', function() {
+            const file = this.files && this.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+                document.getElementById('elem-editor-url').value = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+
+        function applyElementEdit() {
+            if (!currentEditingElement) return;
+            const urlVal = document.getElementById('elem-editor-url').value.trim();
+            const textVal = document.getElementById('elem-editor-text').value.trim();
+
+            if (currentEditingElement.type === 'img' && urlVal) {
+                currentEditingElement.el.src = urlVal;
+            } else if (currentEditingElement.type === 'link') {
+                if (urlVal) currentEditingElement.el.setAttribute('href', urlVal);
+                if (textVal) {
+                    const innerSpan = currentEditingElement.el.querySelector('span');
+                    if (innerSpan) {
+                        innerSpan.textContent = textVal;
+                    } else {
+                        currentEditingElement.el.textContent = textVal;
+                    }
+                }
+            }
+            closeModal('modal-element-editor');
+            currentEditingElement = null;
+        }
+
+        function saveLiveEditedContent() {
+            const mainEl = document.querySelector('main');
+            const titleMain = document.getElementById('shop-title-main');
+            const titleStroke = document.getElementById('shop-title-stroke');
+            if (titleMain && titleStroke) {
+                titleStroke.textContent = titleMain.textContent;
+            }
+            syncDOMGroupsToConfig();
+            document.getElementById('toggle-live-edit').checked = false;
+            toggleLiveEditMode(false);
+            localStorage.setItem(ADMIN_BODY_HTML_KEY, mainEl.innerHTML);
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            // ล้างแคชเก่าของ v1 เพื่อให้แสดงผลโครงสร้างใหม่ที่เอาวงสีแดงออกแล้วทันที
+            localStorage.removeItem('kamsai_shop_live_text_v1');
+
+            const savedMain = localStorage.getItem(ADMIN_BODY_HTML_KEY);
+            if (savedMain) {
+                const mainEl = document.querySelector('main');
+                if (mainEl) mainEl.innerHTML = savedMain;
+            }
+            applyAdminConfig();
+        });
+    </script>
+</body>
+</html>
